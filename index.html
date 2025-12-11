@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI Lead Magnet Title Generator — Neo-Brutal</title>
+<meta name="description" content="Neo-Brutalist AI generator for 60 high-conversion lead magnet titles. Copy, export, favorites, print." />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#ff002b;
+    --yellow:#ffd400;
+    --white:#ffffff;
+    --black:#000000;
+    --bg:#fff;
+    --shadow: 10px 10px 0 var(--black);
+    --pad:18px;
+    --mono: "JetBrains Mono", monospace;
+    --ui: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; font-family:var(--ui); background:var(--bg); color:var(--black); -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1100px; margin:24px auto; padding:12px;}
+
+  /* App shell */
+  .panel{
+    border:6px solid var(--black);
+    background:var(--white);
+    box-shadow:var(--shadow);
+    padding:18px;
+    border-radius:0;
+  }
+
+  /* Header */
+  header{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;}
+  .brand{display:flex; gap:12px; align-items:center;}
+  .logo{
+    width:72px; height:72px; background:var(--red); color:var(--white); display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-family:var(--mono); font-size:20px; border:6px solid var(--black);
+  }
+  h1{margin:0; font-size:22px; font-weight:900; color:var(--black);}
+  .subtitle{margin:0; font-size:13px; color:var(--red); font-weight:700;}
+
+  /* layout */
+  .grid{display:grid; grid-template-columns: 1fr 360px; gap:16px;}
+  @media (max-width:900px){ .grid{grid-template-columns:1fr} .logo{width:56px;height:56px} header{flex-direction:column;align-items:flex-start} }
+
+  /* Controls */
+  .controls .label{font-weight:900; color:var(--red); font-size:13px; margin-bottom:8px;}
+  .topic-input{
+    display:flex; gap:10px; align-items:center;
+  }
+  input[type="text"]{
+    flex:1; padding:12px; font-size:16px; font-weight:700; border:6px solid var(--black); background:var(--white);
+  }
+  select{padding:12px; font-weight:700; border:6px solid var(--black);}
+
+  .tones{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;}
+  .tone{
+    padding:10px 12px; border:6px solid var(--black); font-weight:900; cursor:pointer; background:var(--white);
+  }
+  .tone.active{background:var(--red); color:var(--white); box-shadow:6px 6px 0 var(--black)}
+
+  .lengths{display:flex; gap:8px; margin-top:10px;}
+  .len{padding:10px 12px; border:6px solid var(--black); font-weight:900; cursor:pointer; background:var(--white);}
+  .len.active{background:var(--yellow); color:var(--black); box-shadow:6px 6px 0 var(--black)}
+
+  .big-row{display:flex; gap:10px; margin-top:12px;}
+  .btn{
+    flex:1; padding:14px; font-weight:900; border:6px solid var(--black); cursor:pointer; font-size:16px;
+    background:var(--red); color:var(--white);
+  }
+  .btn.yellow{background:var(--yellow); color:var(--black)}
+  .btn.ghost{background:var(--white); color:var(--black)}
+
+  .sm-row{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  .small{padding:10px 12px; border:6px solid var(--black); font-weight:900; background:var(--white); cursor:pointer}
+
+  /* Results */
+  .results-panel{display:flex; flex-direction:column; gap:12px;}
+  .results-head{display:flex; justify-content:space-between; align-items:center;}
+  .count{font-weight:900; color:var(--red); font-size:14px}
+  .actions-row{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+
+  .results-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:8px;
+  }
+  .card{
+    border:6px solid var(--black); padding:12px; background:var(--white); min-height:86px; display:flex; flex-direction:column; justify-content:space-between;
+    position:relative;
+  }
+  .title{font-size:16px; font-weight:900; color:var(--black); line-height:1.15; margin-bottom:8px}
+  .meta{font-size:12px; font-weight:800; color:var(--red)}
+  .card-actions{display:flex; gap:8px; align-items:center; margin-top:8px}
+  .action{padding:8px 10px; border:6px solid var(--black); font-weight:900; background:var(--white); cursor:pointer}
+
+  /* Favorites and prints */
+  .fav-badge{position:absolute; right:8px; top:8px; border:6px solid var(--black); background:var(--yellow); padding:6px 8px; font-weight:900}
+
+  /* Footer */
+  .note{font-size:13px; color:#222; margin-top:8px}
+
+  /* subtle animations */
+  .pop{transform-origin:center; transition:transform .08s ease}
+  .pop:active{transform:scale(.98)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header style="margin-bottom:12px">
+      <div class="brand">
+        <div class="logo">AI</div>
+        <div>
+          <h1>AI Lead Magnet Title Generator</h1>
+          <div class="subtitle">Neo-Brutal — Red / Yellow / White / Black</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- left: controls -->
+      <div class="panel">
+        <div class="controls">
+          <div class="label">Topic / Niche</div>
+          <div class="topic-input">
+            <input id="topic" type="text" placeholder="e.g. AI automation, Keto recipes, Creator growth" />
+            <select id="preset">
+              <option value="">Preset</option>
+              <option>AI automation</option>
+              <option>Keto recipes</option>
+              <option>Creator growth</option>
+              <option>Crypto trading</option>
+              <option>Productivity</option>
+            </select>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="label">Platform</div>
+            <select id="platformSelect">
+              <option value="Any">Any</option>
+              <option>TikTok / Reels</option>
+              <option>YouTube Shorts</option>
+              <option>Instagram</option>
+              <option>Twitter / X</option>
+              <option>Email Subject</option>
+            </select>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="label">Tone</div>
+            <div class="tones" id="tones">
+              <div class="tone active" data-tone="Curious">Curious</div>
+              <div class="tone" data-tone="Urgent">Urgent</div>
+              <div class="tone" data-tone="Swipe">Swipe</div>
+              <div class="tone" data-tone="Practical">Practical</div>
+              <div class="tone" data-tone="Shock">Shock</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="label">Length</div>
+            <div class="lengths">
+              <div class="len active" data-len="short">Short</div>
+              <div class="len" data-len="medium">Medium</div>
+              <div class="len" data-len="long">Long</div>
+            </div>
+          </div>
+
+          <div class="big-row">
+            <button id="gen5" class="btn pop">Gen 5</button>
+            <button id="gen15" class="btn yellow pop">Gen 15</button>
+            <button id="gen60" class="btn pop">Gen 60</button>
+          </div>
+
+          <div class="sm-row">
+            <button id="copyAll" class="small pop">Copy All</button>
+            <button id="downloadTxt" class="small pop">Download TXT</button>
+            <button id="downloadCsv" class="small pop">Download CSV</button>
+            <button id="downloadHtml" class="small pop">Download HTML</button>
+            <button id="printBtn" class="small pop">Print (Save PDF)</button>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button id="viewFavs" class="small pop">View Favorites</button>
+            <button id="clearFavs" class="small pop">Clear Favorites</button>
+            <button id="clearResults" class="small pop">Clear Results</button>
+          </div>
+
+          <div class="note">Tip: leave topic blank for a quick idea. Favorites stored locally.</div>
+        </div>
+      </div>
+
+      <!-- right: results -->
+      <div class="panel results-panel">
+        <div class="results-head">
+          <div style="font-weight:900; color:var(--red)">Generated Titles</div>
+          <div class="count" id="count">0</div>
+        </div>
+
+        <div class="actions-row" style="margin-top:6px">
+          <div style="font-size:13px;color:#222">Platform: <span id="platformLabel">Any</span></div>
+        </div>
+
+        <div id="resultsGrid" class="results-grid" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ====== sound ====== */
+function beep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'square';
+    o.frequency.value = 880;
+    g.gain.value = 0.02;
+    o.connect(g);
+    g.connect(ctx.destination);
+    o.start();
+    setTimeout(()=>{ o.stop(); ctx.close(); }, 70);
+  } catch(e){ /* ignore on unsupported */ }
+}
+
+/* ====== templates ====== */
+const templates = [
+  "The Ultimate Guide to {{x}}",
+  "The Cheat Sheet for {{x}}",
+  "The Quickstart Handbook for {{x}}",
+  "The 10-Minute Blueprint to {{x}}",
+  "How to Master {{x}} in Record Time",
+  "The Proven 5-Step Playbook for {{x}}",
+  "The Beginner’s Shortcut to {{x}}",
+  "The Expert’s Framework for {{x}}",
+  "The Zero-Fluff Roadmap to {{x}}",
+  "The Viral Formula Behind {{x}}",
+  "How to Automate {{x}} Without Being Techy",
+  "Why 99% Fail at {{x}} — And How to Fix It",
+  "Avoid These 7 Deadly Mistakes in {{x}}",
+  "The Hidden Opportunities Inside {{x}}",
+  "The No-BS Breakdown of {{x}}",
+  "The Fast-Track System for {{x}}",
+  "The Million-Dollar Strategy for {{x}}",
+  "The Step-by-Step Checklist for {{x}}",
+  "The Ultimate Toolkit for {{x}}",
+  "The Complete Starter Kit for {{x}}",
+  "The Blueprint All Pros Use for {{x}}",
+  "The Playbook That Makes {{x}} Easy",
+  "The Crash Course in {{x}}",
+  "The 24-Hour Jumpstart to {{x}}",
+  "The Secret Weapon for {{x}}",
+  "How to Scale {{x}} Fast",
+  "The 7 Hacks That Explode {{x}} Results",
+  "The One-Page Plan for {{x}}",
+  "The Swipe File Every {{x}} Creator Needs",
+  "The Productivity Booster for {{x}}",
+  "The Mini-Course on {{x}}",
+  "The Field Manual for {{x}}",
+  "Why {{x}} Isn’t Working (And How to Fix It)",
+  "The Power Pack for {{x}}",
+  "The High-ROI Guide to {{x}}",
+  "The Proven Formula for {{x}}",
+  "The Only Template You Need for {{x}}",
+  "The Exact Script for {{x}} Success",
+  "The Insider’s Map to {{x}}",
+  "The Creator’s Toolkit for {{x}}",
+  "The Client-Attracting Formula for {{x}}",
+  "The Shortcut to Consistent {{x}}",
+  "The Viral-Ready Structure for {{x}}",
+  "The High-Impact Strategy for {{x}}",
+  "How to Build {{x}} From Scratch",
+  "How to Grow {{x}} Predictably",
+  "How to Monetize {{x}} Easily",
+  "The Fast Results Kit for {{x}}",
+  "The No-Fail Strategy for {{x}}",
+  "The 3-Part System for {{x}}",
+  "The Underrated Method for {{x}}",
+  "The Plug-and-Play Plan for {{x}}",
+  "Do This Daily to Improve {{x}}",
+  "The Blueprint for Explosive {{x}}",
+  "The High-Conversion Method for {{x}}",
+  "The Must-Have Resource Pack for {{x}}",
+  "How to Unlock Instant {{x}} Results",
+  "The Ultimate Swipe File for {{x}}",
+  "The Growth Accelerator for {{x}}"
+];
+
+/* ====== state ====== */
+let lastResults = [];
+const resultsGrid = document.getElementById('resultsGrid');
+const countEl = document.getElementById('count');
+const platformLabel = document.getElementById('platformLabel');
+
+/* ====== helpers ====== */
+const rnd = arr => arr[Math.floor(Math.random()*arr.length)];
+function polish(str){
+  str = str.replace(/\s+/g,' ').trim();
+  if(!/[.!?…]$/.test(str)) str = str + '';
+  return str;
+}
+function ensureTopic(s){
+  const t = (s||'').trim();
+  return t? t : 'Your Topic';
+}
+
+/* ====== generation ====== */
+function generateN(n){
+  beep();
+  const topicInput = document.getElementById('topic').value;
+  const topic = ensureTopic(topicInput);
+  const platform = document.getElementById('platformSelect').value;
+  platformLabel.textContent = platform;
+  lastResults = [];
+  for(let i=0;i<n;i++){
+    const template = templates[i % templates.length];
+    let title = template.replace(/{{x}}/g, topic);
+    // tone + length modifiers
+    const tone = document.querySelector('.tone.active').dataset.tone;
+    const len = document.querySelector('.len.active').dataset.len;
+    // simple tone modifiers
+    if(tone==='Urgent' && Math.random()<0.6) title = 'Right now: ' + title;
+    if(tone==='Shock' && Math.random()<0.6) title = 'Shocking: ' + title;
+    if(tone==='Swipe' && Math.random()<0.35) title = 'Swipe: ' + title;
+    if(tone==='Practical' && Math.random()<0.4) title = 'Practical: ' + title;
+    if(tone==='Curious' && Math.random()<0.5) title = 'What no one tells you about ' + topic + ' — ' + template.replace(/{{x}}/g, topic);
+    // length trim
+    if(len==='short') title = title.split(' ').slice(0,7).join(' ') + (title.split(' ').length>7 ? '…' : '');
+    if(len==='medium') title = title.split(' ').slice(0,12).join(' ') + (title.split(' ').length>12 ? '…' : '');
+    title = polish(title);
+    lastResults.push({title, platform, tone});
+  }
+  renderResults(lastResults);
+}
+
+/* ====== render ====== */
+function renderResults(list){
+  resultsGrid.innerHTML = '';
+  list.forEach((r, i) => {
+    const card = document.createElement('div'); card.className='card pop';
+    const title = document.createElement('div'); title.className='title'; title.textContent = r.title;
+    const meta = document.createElement('div'); meta.className='meta'; meta.textContent = `${r.tone} • ${r.platform}`;
+    const actions = document.createElement('div'); actions.className='card-actions';
+    const copyBtn = document.createElement('button'); copyBtn.className='action pop'; copyBtn.textContent='COPY';
+    copyBtn.onclick = async ()=>{ await navigator.clipboard.writeText(r.title); copyBtn.textContent='COPIED'; setTimeout(()=>copyBtn.textContent='COPY',900) };
+    const favBtn = document.createElement('button'); favBtn.className='action pop'; favBtn.textContent='★';
+    favBtn.onclick = ()=>{ saveFavorite(r); favBtn.textContent='✓'; setTimeout(()=>favBtn.textContent='★',900) };
+    const varBtn = document.createElement('button'); varBtn.className='action pop'; varBtn.textContent='VAR';
+    varBtn.onclick = ()=>{ const v = variant(r.title); title.textContent = v; r.title = v; };
+    const dlBtn = document.createElement('button'); dlBtn.className='action pop'; dlBtn.textContent='TXT';
+    dlBtn.onclick = ()=> downloadTextFile(r.title, `title-${i+1}.txt`);
+    // favorite badge
+    const favBadge = document.createElement('div'); favBadge.className='fav-badge'; favBadge.textContent='SAVE';
+    card.appendChild(title); card.appendChild(meta);
+    actions.appendChild(copyBtn); actions.appendChild(varBtn); actions.appendChild(favBtn); actions.appendChild(dlBtn);
+    card.appendChild(actions); card.appendChild(favBadge);
+    resultsGrid.appendChild(card);
+  });
+  countEl.textContent = `${list.length} titles`;
+}
+
+/* ====== variants & favorites ====== */
+function variant(s){
+  // tiny deterministic variation
+  if(!s) return s;
+  if(s.length>40) return s.replace(/(The|How|Why|The|How to)/i, (m)=>m + ' —');
+  return s + ' — new trick';
+}
+
+function saveFavorite(item){
+  const favs = JSON.parse(localStorage.getItem('leadmag_favs')||'[]');
+  favs.push(Object.assign({},item,{ts:(new Date()).toISOString()}));
+  localStorage.setItem('leadmag_favs', JSON.stringify(favs));
+}
+
+/* ====== copy / download / export ====== */
+document.getElementById('copyAll').addEventListener('click', async ()=>{
+  if(lastResults.length===0){ alert('No titles — generate first.'); return; }
+  const text = lastResults.map(r=>r.title).join('\n');
+  await navigator.clipboard.writeText(text);
+  beep();
+  alert('Copied all titles ✅');
+});
+
+function downloadTextFile(text, name='titles.txt'){
+  const blob = new Blob([text], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
+}
+
+document.getElementById('downloadTxt').addEventListener('click', ()=>{
+  if(lastResults.length===0){ alert('No titles — generate first.'); return; }
+  const t = lastResults.map(r=>r.title).join('\n');
+  downloadTextFile(t,'lead-magnet-titles.txt');
+});
+
+document.getElementById('downloadCsv').addEventListener('click', ()=>{
+  if(lastResults.length===0){ alert('No titles — generate first.'); return; }
+  const rows = ['title,tone,platform'];
+  lastResults.forEach(r=> rows.push(`"${r.title.replace(/"/g,'""')}","${r.tone}","${r.platform}"`));
+  const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='lead-magnet-titles.csv'; a.click(); URL.revokeObjectURL(url);
+});
+
+document.getElementById('downloadHtml').addEventListener('click', ()=>{
+  if(lastResults.length===0){ alert('No titles — generate first.'); return; }
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>Lead Magnet Titles</title></head><body><pre>${lastResults.map(r=>r.title).join('\\n')}</pre></body></html>`;
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='lead-magnet-titles.html'; a.click(); URL.revokeObjectURL(url);
+});
+
+document.getElementById('printBtn').addEventListener('click', ()=> {
+  if(lastResults.length===0){ alert('No titles — generate first.'); return; }
+  const w = window.open('', '_blank');
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>Lead Magnet Titles</title>
+  <style>body{font-family:Inter,Arial;padding:20px}pre{font-size:16px}</style></head><body><h1>Lead Magnet Titles</h1><pre>${lastResults.map(r=>r.title).join('\\n')}</pre></body></html>`;
+  w.document.write(html); w.document.close();
+  w.print();
+});
+
+/* ====== favorites management ====== */
+document.getElementById('viewFavs').addEventListener('click', ()=>{
+  const favs = JSON.parse(localStorage.getItem('leadmag_favs')||'[]');
+  if(favs.length===0){ alert('No favorites yet. Star titles to save them.'); return; }
+  lastResults = favs.map(f=>({title:f.title,tone:f.tone,platform:f.platform}));
+  renderResults(lastResults);
+});
+
+document.getElementById('clearFavs').addEventListener('click', ()=>{
+  if(!confirm('Clear all favorites?')) return;
+  localStorage.removeItem('leadmag_favs');
+  alert('Favorites cleared.');
+});
+
+document.getElementById('clearResults').addEventListener('click', ()=>{
+  if(!confirm('Clear current generated titles?')) return;
+  lastResults = [];
+  resultsGrid.innerHTML = '';
+  countEl.textContent = '0';
+});
+
+/* ====== UI wiring ====== */
+document.getElementById('preset').addEventListener('change', (e)=>{ if(e.target.value) document.getElementById('topic').value = e.target.value; });
+
+document.getElementById('gen5').addEventListener('click', ()=> generateN(5));
+document.getElementById('gen15').addEventListener('click', ()=> generateN(15));
+document.getElementById('gen60').addEventListener('click', ()=> generateN(60));
+
+/* tone/len toggles */
+document.querySelectorAll('.tone').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tone').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+  });
+});
+document.querySelectorAll('.len').forEach(l=>{
+  l.addEventListener('click', ()=>{
+    document.querySelectorAll('.len').forEach(x=>x.classList.remove('active'));
+    l.classList.add('active');
+  });
+});
+
+/* initial seed */
+window.addEventListener('load', ()=>{
+  document.getElementById('topic').value = '';
+  // auto-generate a small default set so user sees it's working
+  generateN(6);
+});
+</script>
+</body>
+</html>
